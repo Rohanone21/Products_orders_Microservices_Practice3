@@ -1,0 +1,134 @@
+{
+  "Routes": [
+    {
+      // Product Service Routes
+      "DownstreamPathTemplate": "/api/products",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7259
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "Key": "Products"
+    },
+    {
+      "DownstreamPathTemplate": "/api/products/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7259
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "Key": "Products"
+    },
+    {
+      // Search Products Route
+      "DownstreamPathTemplate": "/api/products/search",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7259
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products/search",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "ProductSearch"
+    },
+    {
+      // Price Range Search Route
+      "DownstreamPathTemplate": "/api/products/price-range",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7259
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products/price-range",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "ProductPriceRange"
+    },
+    {
+      // Product Statistics Route
+      "DownstreamPathTemplate": "/api/products/stats",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7259
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products/stats",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "ProductStats"
+    },
+
+    // Order Service Routes
+    {
+      "DownstreamPathTemplate": "/api/orders",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7233
+        }
+      ],
+      "UpstreamPathTemplate": "/api/orders",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "Key": "Orders"
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7233
+        }
+      ],
+      "UpstreamPathTemplate": "/api/orders/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "Key": "Orders"
+    },
+    {
+      // Order Statistics Route
+      "DownstreamPathTemplate": "/api/orders/stats",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7233
+        }
+      ],
+      "UpstreamPathTemplate": "/api/orders/stats",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "OrderStats"
+    },
+    {
+      // Order Date Range Route - ADDED
+      "DownstreamPathTemplate": "/api/orders/date-range",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7233
+        }
+      ],
+      "UpstreamPathTemplate": "/api/orders/date-range",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "OrderDateRange"
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7057",
+    "RequestIdKey": "OcelotRequestId"
+  }
+}
