@@ -28,7 +28,7 @@
       "Key": "Products"
     },
     {
-      // Search Products Route
+      // Search Products Route - ALREADY EXISTS
       "DownstreamPathTemplate": "/api/products/search",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -68,6 +68,34 @@
       "UpstreamPathTemplate": "/api/products/stats",
       "UpstreamHttpMethod": [ "GET" ],
       "Key": "ProductStats"
+    },
+    {
+      // Top Expensive Products Route
+      "DownstreamPathTemplate": "/api/products/Top-Expensive",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7259
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products/Top-Expensive",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "TopExpensiveProducts"
+    },
+    {
+      // Name Starts With Route
+      "DownstreamPathTemplate": "/api/products/name-starts-with/{letter}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7259
+        }
+      ],
+      "UpstreamPathTemplate": "/api/products/name-starts-with/{letter}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "NameStartsWith"
     },
 
     // Order Service Routes
@@ -112,7 +140,7 @@
       "Key": "OrderStats"
     },
     {
-      // Order Date Range Route - ADDED
+      // Order Date Range Route
       "DownstreamPathTemplate": "/api/orders/date-range",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -124,6 +152,48 @@
       "UpstreamPathTemplate": "/api/orders/date-range",
       "UpstreamHttpMethod": [ "GET" ],
       "Key": "OrderDateRange"
+    },
+    {
+      // Recent Orders Route
+      "DownstreamPathTemplate": "/api/orders/recent",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7233
+        }
+      ],
+      "UpstreamPathTemplate": "/api/orders/recent",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "RecentOrders"
+    },
+    {
+      // Orders by Product Route
+      "DownstreamPathTemplate": "/api/orders/product/{productId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7233
+        }
+      ],
+      "UpstreamPathTemplate": "/api/orders/product/{productId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "OrdersByProduct"
+    },
+    {
+      // Product Performance Route
+      "DownstreamPathTemplate": "/api/orders/product-performance",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7233
+        }
+      ],
+      "UpstreamPathTemplate": "/api/orders/product-performance",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "ProductPerformance"
     }
   ],
 

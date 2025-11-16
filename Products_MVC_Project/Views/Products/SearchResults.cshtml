@@ -1,0 +1,66 @@
+﻿@model List<Products_MVC_Project.Models.Product>
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Search Results</h1>
+        <a asp-action="Search" class="btn btn-outline-primary">New Search</a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+    {
+        <div class="alert alert-info">
+            <h5>Search Results for: "@ViewBag.SearchTerm"</h5>
+            <p class="mb-0">Found @Model.Count product(s) matching your search.</p>
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>@product.Id</td>
+                            <td>@product.Name</td>
+                            <td>$@product.Price.ToString("F2")</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-info">Details</a>
+                                    <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            <h4>No products found</h4>
+            <p>No products match your search criteria. Please try a different search term.</p>
+            <a asp-action="Search" class="btn btn-primary">Try Again</a>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-action="Search" class="btn btn-primary me-2">New Search</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to All Products</a>
+    </div>
+</div>

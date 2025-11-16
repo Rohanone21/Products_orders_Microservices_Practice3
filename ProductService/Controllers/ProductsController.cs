@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // ✅ Needed for EF queries
+using Microsoft.EntityFrameworkCore;
 using ProductService.Data;
 using ProductService.Models;
 
@@ -148,6 +148,22 @@ namespace ProductService.Controllers
 
         }
 
+        [HttpGet("Top-Expensive")]
+
+        public async Task<ActionResult<IEnumerable<Product>>> GetTopExpensiveProduct([FromQuery]int count)
+        {
+            var products = await _context.products.OrderByDescending(o => o.Price).Take(count).ToListAsync();
+            return Ok(products);
+        }
+
+        [HttpGet("name-starts-with/{letter}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByNameStartsWith(string  letter)
+        {
+            var products= await _context.products.
+                Where(o=>o.Name.StartsWith(letter.ToString(),StringComparison.OrdinalIgnoreCase)).
+                OrderBy(o=>o.Name).ToListAsync();
+            return Ok(products);
+        }
 
     }
 }

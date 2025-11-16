@@ -163,6 +163,63 @@ namespace OrderService.Controllers
 
         }
 
+        [HttpGet("recent")]
+
+        public async Task<ActionResult<IEnumerable<Order>>> GetRecentOrders([FromQuery] int count)
+        {
+            var recentorders = await _context.Orders
+                .OrderByDescending(o => o.OrderDate)
+                .Take(count).ToListAsync();
+
+             return Ok(recentorders);
+        }
+        [HttpGet("product/{productId}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByProduct(int productId)
+        {
+            var productorders = await _context.Orders.Where(o => o.ProductId == productId).OrderByDescending(o => o.OrderDate).ToListAsync();
+            if (!productorders.Any())
+            {
+                return NotFound();
+            }
+            return Ok(productorders);
+        }
+
+        [HttpGet("product-performance")]
+        public async Task<ActionResult<IEnumerable<object>>> GetProductPerformance()
+        {
+            var orders = await _context.Orders.GroupBy(o => o.ProductId).Select(s => new
+            {
+                ProductId = s.Key,
+                TotalOrders = s.Count(),
+                TotalRevenue=s.Sum(o=>o.TotalPrice),
+                TotalUnitsSold=s.Sum(o=>o.Quantity),
+                AverageOrderValue=s.Average(o=>o.Quantity),
+                FirstOrderDate=s.Min(o=>o.OrderDate),
+                LastOrderDate = s.Max(o => o.OrderDate)
+
+            }
+
+                ).OrderByDescending(o=>o.TotalRevenue).ToListAsync();
+
+            return Ok(orders);
+        }
+
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Product>>> SearchProducts([FromQuery] string Names)
+        {
+
+            if (string.IsNullOrEmpty(Names))
+            {
+                return BadRequest();
+            }
+
+            var products= await _context.Products.Where(p=>p.Name.Contains(Names)).OrderByDescending(o=>o.Name).ToListAsync();
+            return Ok(products);
+        }
+
+
+
 
         public class CreateOrderRequest
         {

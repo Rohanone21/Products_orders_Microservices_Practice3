@@ -1,0 +1,180 @@
+﻿@{
+    ViewData["Title"] = "Products by Starting Letter";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h2 class="card-title mb-0">
+                        <i class="bi bi-fonts"></i> Products by Starting Letter
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Enter a single letter to find all products whose names start with that letter. Search is case-insensitive.</p>
+
+                    <form method="post" class="mt-4">
+                        <div class="form-group mb-4">
+                            <label for="letter" class="form-label fs-5 fw-bold">Starting Letter</label>
+                            <input type="text" id="letter" name="letter"
+                                   class="form-control form-control-lg text-uppercase text-center"
+                                   maxlength="1" pattern="[A-Za-z]"
+                                   placeholder="Enter a letter A-Z" required
+                                   style="font-size: 2rem; font-weight: bold; letter-spacing: 0.5rem;"
+                                   title="Please enter a single letter (A-Z)" />
+                            <div class="form-text text-center">Enter a single letter from A to Z</div>
+                        </div>
+
+                        @if (ViewData.ModelState.ContainsKey("") && ViewData.ModelState[""].Errors.Count > 0)
+                        {
+                            <div class="alert alert-danger">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                @ViewData.ModelState[""].Errors.First().ErrorMessage
+                            </div>
+                        }
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                            <button type="submit" class="btn btn-info btn-lg me-md-3">
+                                <i class="bi bi-search"></i> Find Products
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg">
+                                <i class="bi bi-arrow-left"></i> Back to Products
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quick Letter Selection -->
+            <div class="card mt-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-lightning"></i> Quick Letter Search
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Click on any letter below to instantly search for products starting with that letter:</p>
+
+                    <div class="text-center">
+                        @for (char c = 'A'; c <= 'Z'; c++)
+                        {
+                            <a asp-action="NameStartsWithDirect" asp-route-letter="@c"
+                               class="btn btn-outline-primary btn-letter m-1"
+                               style="width: 50px; height: 50px; font-size: 1.2rem; font-weight: bold;"
+                               title="Search products starting with '@c'">
+                                @c
+                            </a>
+                        }
+                    </div>
+
+                    <!-- Quick Numbers -->
+                    <div class="text-center mt-3">
+                        <p class="text-muted mb-2">Common starting characters:</p>
+                        @for (char c = '0'; c <= '9'; c++)
+                        {
+                            <a asp-action="NameStartsWithDirect" asp-route-letter="@c"
+                               class="btn btn-outline-secondary btn-letter m-1"
+                               style="width: 50px; height: 50px; font-size: 1.2rem; font-weight: bold;"
+                               title="Search products starting with '@c'">
+                                @c
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Tips -->
+            <div class="card mt-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-lightbulb"></i> Search Tips
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                    <strong>Case Insensitive:</strong> Search works for both uppercase and lowercase
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                    <strong>Exact Start:</strong> Finds products that exactly start with the letter
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                    <strong>Quick Navigation:</strong> Use the letter grid for instant results
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                    <strong>Numbers Supported:</strong> You can also search by numbers (0-9)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .btn-letter {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .btn-letter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .form-control:focus {
+            border-color: #0dcaf0;
+            box-shadow: 0 0 0 0.2rem rgba(13, 202, 240, 0.25);
+        }
+
+        .card {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 10px;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Auto-uppercase and limit to one character
+        document.getElementById('letter').addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase().charAt(0);
+        });
+
+        // Focus on input when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('letter').focus();
+        });
+
+        // Add click animation to letter buttons
+        document.querySelectorAll('.btn-letter').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.add('btn-primary');
+                this.classList.remove('btn-outline-primary', 'btn-outline-secondary');
+                setTimeout(() => {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-outline-primary');
+                }, 300);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@model System.Text.Json.JsonElement
+
+@{
+    ViewData["Title"] = "Product Statistics";
+}
+
+<h1>Product Statistics</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">Product Statistics</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-6">Total Products:</dt>
+                    <dd class="col-sm-6">@Model.GetProperty("totalProducts").GetInt32()</dd>
+
+                    <dt class="col-sm-6">Average Price:</dt>
+                    <dd class="col-sm-6">$@Model.GetProperty("averagePrice").GetDouble().ToString("F2")</dd>
+
+                    <dt class="col-sm-6">Maximum Price:</dt>
+                    <dd class="col-sm-6">$@Model.GetProperty("maxPrice").GetDouble().ToString("F2")</dd>
+
+                    <dt class="col-sm-6">Minimum Price:</dt>
+                    <dd class="col-sm-6">$@Model.GetProperty("minPrice").GetDouble().ToString("F2")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>

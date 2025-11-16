@@ -1,0 +1,93 @@
+﻿@model List<Products_MVC_Project.Models.Product>
+
+@{
+    ViewData["Title"] = "Price Range Results";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Products in Price Range</h1>
+        <a asp-action="PriceRange" class="btn btn-outline-success">New Price Search</a>
+    </div>
+
+    <div class="alert alert-success">
+        <h5>Price Range: $@ViewBag.MinPrice.ToString("F2") - $@ViewBag.MaxPrice.ToString("F2")</h5>
+        <p class="mb-0">Found @Model.Count product(s) in this price range.</p>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>@product.Id</td>
+                            <td>@product.Name</td>
+                            <td>
+                                <span class="badge bg-success fs-6">$@product.Price.ToString("F2")</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-info">Details</a>
+                                    <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Price Statistics</h5>
+                        <dl class="row">
+                            <dt class="col-sm-6">Lowest Price:</dt>
+                            <dd class="col-sm-6">$@Model.Min(p => p.Price).ToString("F2")</dd>
+
+                            <dt class="col-sm-6">Highest Price:</dt>
+                            <dd class="col-sm-6">$@Model.Max(p => p.Price).ToString("F2")</dd>
+
+                            <dt class="col-sm-6">Average Price:</dt>
+                            <dd class="col-sm-6">$@Model.Average(p => p.Price).ToString("F2")</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Value</h5>
+                        <h3 class="text-success">$@Model.Sum(p => p.Price).ToString("F2")</h3>
+                        <p class="text-muted">Combined value of all products in this range</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            <h4>No products found in this price range</h4>
+            <p>Try adjusting your price range or <a asp-action="PriceRange" class="alert-link">search again</a>.</p>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-action="PriceRange" class="btn btn-success me-2">New Price Search</a>
+        <a asp-action="Index" class="btn btn-primary">Back to All Products</a>
+    </div>
+</div>
