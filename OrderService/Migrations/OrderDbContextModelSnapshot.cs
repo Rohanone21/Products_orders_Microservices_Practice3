@@ -33,16 +33,18 @@ namespace OrderService.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Orders");
                 });
@@ -59,12 +61,59 @@ namespace OrderService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Laptop",
+                            Price = 55000.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Smartphone",
+                            Price = 25000.00m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Tablet",
+                            Price = 18000.00m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Headphones",
+                            Price = 3000.00m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Smartwatch",
+                            Price = 12000.00m
+                        });
+                });
+
+            modelBuilder.Entity("OrderService.Models.Order", b =>
+                {
+                    b.HasOne("OrderService.Models.Product", "Product")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("OrderService.Models.Product", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

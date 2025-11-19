@@ -7,10 +7,12 @@ namespace OrderService.Client
     public interface IProductApiClient
     {
         Task<Product?> GetProductByIdAsync(int id);
+        Task<List<Product>> GetProductsAsync();
+        Task<bool> TestConnectionAsync();
     }
-    public class ProductApiClient: IProductApiClient
-    {
 
+    public class ProductApiClient : IProductApiClient
+    {
         private readonly HttpClient _client;
         private readonly ILogger<ProductApiClient> _logger;
 
@@ -24,28 +26,59 @@ namespace OrderService.Client
         {
             try
             {
-                _logger.LogInformation("Fetching product with ID: {ProductId}", id);
-                var response = await _client.GetAsync($"/api/products/{id}");
-                if (!response.IsSuccessStatusCode)
+                var response = await _client.GetAsync($"api/products/{id}");
+                if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogWarning("Failed to fetch product with ID: {ProductId}. Status: {StatusCode}",
-                        id, response.StatusCode);
-                    return null;
+                    var content = await response.Content.ReadAsStringAsync();
+                    var product = JsonSerializer.Deserialize<Product>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                    return product;
                 }
-                var content = await response.Content.ReadAsStringAsync();
-                var product = JsonSerializer.Deserialize<Product>(content, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-                _logger.LogInformation("Successfully fetched product: {ProductName}", product?.Name);
-                return product;
+                return null;
             }
             catch (Exception ex)
             {
-
-                _logger.LogError(ex, "Error occurred while fetching product with ID: {ProductId}", id);
+                _logger.LogError(ex, "Error fetching product with ID: {ProductId}", id);
                 return null;
+            }
+        }
 
+        public async Task<List<Product>> GetProductsAsync()
+        {
+            try
+            {
+                var response = await _client.GetAsync("api/products");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var products = JsonSerializer.Deserialize<List<Product>>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                    return products ?? new List<Product>();
+                }
+                return new List<Product>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching products");
+                return new List<Product>();
+            }
+        }
+
+        public async Task<bool> TestConnectionAsync()
+        {
+            try
+            {
+                var response = await _client.GetAsync("api/products");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error testing connection");
+                return false;
             }
         }
     }
