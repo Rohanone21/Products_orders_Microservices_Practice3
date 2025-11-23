@@ -1,0 +1,25 @@
+﻿@model List<Orders_New_MVC_Microservice.Models.ViewModels.ProductDemandViewModel>
+
+<div class="container mt-4">
+    <h2 class="text-primary">Product Demand</h2>
+
+    <table class="table table-bordered mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Total Orders</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.ProductId</td>
+                    <td>@p.ProductName</td>
+                    <td>@p.OrdersCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

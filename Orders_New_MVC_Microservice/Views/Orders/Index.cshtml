@@ -1,0 +1,52 @@
+﻿@model Orders_New_MVC_Microservice.Models.ViewModels.DashboardViewModel
+
+<div class="container mt-4">
+
+    <h2 class="text-primary mb-3">Dashboard</h2>
+
+    <!-- ===== ACTION BUTTONS ===== -->
+    <div class="mb-4">
+        <a href="/Orders/AllOrders" class="btn btn-primary btn-sm">All Orders</a>
+        <a href="/Orders/Stats" class="btn btn-info btn-sm">Statistics</a>
+        <a href="/Orders/Latest" class="btn btn-warning btn-sm">Latest Orders</a>
+        <a href="/Orders/ProductPerformance" class="btn btn-success btn-sm">Product Performance</a>
+        <a href="/Orders/MostOrderedProduct" class="btn btn-danger btn-sm">Most Ordered Product</a>
+        <a href="/Orders/ProductDemand" class="btn btn-secondary btn-sm">Product Demand</a>
+        <a href="/Orders/OrdersTable" class="btn btn-dark btn-sm">Orders Table</a>
+    </div>
+
+    <div class="row">
+
+        <!-- ================= PRODUCTS TABLE ================= -->
+        <div class="col-md-12">
+            <h4>Products</h4>
+
+            <table class="table table-bordered table-striped w-100">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Name</th>
+                        <th style="width: 140px;">Price (₹)</th>
+                        <th style="width: 120px;">Add Order</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.Products)
+                    {
+                        <tr>
+                            <td>@p.Id</td>
+                            <td>@p.Name</td>
+                            <td>@p.Price</td>
+                            <td>
+                                <a href="/Orders/Create/@p.Id" class="btn btn-sm btn-success">
+                                    Add Order
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

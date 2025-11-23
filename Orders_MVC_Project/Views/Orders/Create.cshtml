@@ -1,5 +1,4 @@
-﻿@using Orders_MVC_Project.Models.ViewModels
-@model CreateOrderRequest
+﻿@model Orders_MVC_Project.ViewModels.CreateOrderViewModel
 
 @{
     ViewData["Title"] = "Create Order";
@@ -7,40 +6,85 @@
 
 <h2>Create New Order</h2>
 
-<!-- Test Connections Button -->
-
-
-<!-- Sync Products Button -->
-
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-}
-
-<form asp-action="Create">
-    <div class="form-group">
-        <label asp-for="ProductId" class="control-label"></label>
-        <select asp-for="ProductId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.AvailableProducts, "Id", "Name"))">
-            <option value="">-- Select Product --</option>
-        </select>
-        <span asp-validation-for="ProductId" class="text-danger"></span>
-    </div>
+<form asp-action="Create" method="post">
 
     <div class="form-group">
-        <label asp-for="Quantity" class="control-label"></label>
-        <input asp-for="Quantity" class="form-control" />
-        <span asp-validation-for="Quantity" class="text-danger"></span>
+        <label>Product ID</label>
+        <input asp-for="Order.ProductId" id="ProductId" class="form-control" readonly />
+        <span asp-validation-for="Order.ProductId" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <div class="form-group mt-2">
+        <label>Product Name</label>
+        <input id="ProductName" class="form-control" readonly />
     </div>
+
+    <div class="form-group mt-2">
+        <label>Price</label>
+        <input id="ProductPrice" class="form-control" readonly />
+    </div>
+
+    <div class="form-group mt-2">
+        <label>Quantity</label>
+        <input asp-for="Order.Quantity" type="number" min="1" class="form-control" />
+        <span asp-validation-for="Order.Quantity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Create Order</button>
 </form>
+
+<hr />
+
+<h3>Select Product</h3>
+
+<table class="table table-bordered table-hover" id="productsTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price (₹)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Products)
+        {
+            <tr class="product-row"
+                data-id="@p.Id"
+                data-name="@p.Name"
+                data-price="@p.Price">
+
+                <td>@p.Id</td>
+                <td>@p.Name</td>
+                <td>@p.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .selected-row {
+        background-color: #c0e8ff !important;
+        font-weight: bold;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll(".product-row").forEach(row => {
+            row.addEventListener("click", function () {
+
+                // Remove previous selection
+                document.querySelectorAll(".product-row")
+                    .forEach(r => r.classList.remove("selected-row"));
+
+                // Add highlight
+                this.classList.add("selected-row");
+
+                // Fill fields
+                document.getElementById("ProductId").value = this.dataset.id;
+                document.getElementById("ProductName").value = this.dataset.name;
+                document.getElementById("ProductPrice").value = this.dataset.price;
+            });
+        });
+    </script>
+}

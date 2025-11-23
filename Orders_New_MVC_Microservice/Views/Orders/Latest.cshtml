@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Orders_New_MVC_Microservice.Models.ViewModels.OrderWithName>
+
+<div class="container mt-4">
+    <h2>Latest Orders</h2>
+
+    <table class="table table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var o in Model)
+            {
+                <tr>
+                    <td>@o.OrderId</td>
+                    <td>@o.CustomerName</td>
+                    <td>@o.ProductName</td>       @* ✅ changed *@
+                    <td>@o.Quantity</td>
+                    <td>@o.OrderDate.ToString("yyyy-MM-dd")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

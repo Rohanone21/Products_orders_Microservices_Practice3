@@ -1,0 +1,251 @@
+﻿
+
+
+
+
+@model IEnumerable<Orders_New_MVC_Microservice.Models.ViewModels.OrderWithName>
+
+@{
+    ViewData["Title"] = "Orders Table";
+}
+
+<h2 class="text-center mt-4">Orders List</h2>
+
+<table class="table table-bordered table-striped mt-4">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Amount (₹)</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.CustomerName</td>
+                <td>@order.ProductName</td>
+                <td>@order.Quantity</td>
+                <td>@order.TotalPrice</td>
+                <td>@order.OrderDate</td>
+                <td>
+                    <button id="payBtn_@order.OrderId"
+                            class="btn btn-primary"
+                            onclick="startPayment('@order.OrderId', '@order.CustomerName', '@order.ProductName', '@order.Quantity','@order.TotalPrice' ,'@order.OrderDate')">
+                        Pay Now
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- PAYMENT OPTIONS POPUP -->
+<div id="paymentPopup" style="display:none;" class="overlay">
+    <div class="popup">
+        <h3>Select Payment Method</h3>
+        <button class="btn btn-success mt-3" onclick="showCardPayment()">Pay by Card</button><br />
+        <button class="btn btn-info mt-3" onclick="showUPIPayment()">Pay by UPI QR</button>
+        <button class="btn btn-danger mt-3" onclick="hidePaymentPopup()">Cancel</button>
+    </div>
+</div>
+
+<!-- LOADER -->
+<div id="loader" style="display:none;" class="overlay">
+    <div class="text-center">
+        <div class="spinner-border text-light" style="width:80px; height:80px;"></div>
+        <h3 class="text-white mt-3">Processing Payment...</h3>
+    </div>
+</div>
+
+<!-- CARD PAYMENT -->
+<div id="cardPopup" style="display:none;" class="overlay">
+    <div class="popup">
+        <h3>Card Payment</h3>
+
+        <input type="text" class="form-control mt-2" placeholder="Card Number" />
+        <input type="text" class="form-control mt-2" placeholder="Expiry (MM/YY)" />
+        <input type="text" class="form-control mt-2" placeholder="CVV" />
+
+        <button class="btn btn-success mt-3" onclick="processPayment()">Pay ₹<span id='amountCard'></span></button>
+        <button class="btn btn-danger mt-3" onclick="hideCardPopup()">Cancel</button>
+    </div>
+</div>
+
+<!-- UPI PAYMENT -->
+<div id="upiPopup" style="display:none;" class="overlay">
+    <div class="popup text-center">
+        <h3>Scan UPI QR</h3>
+
+        <!-- Dummy working UPI QR image -->
+        <img id="qrImage"
+             src="https://imaginative-conkies-9422c1.netlify.app/static/media/QR.2af3acf2250b268a101a.png"
+             width="250"
+             style="border:2px solid black; border-radius:10px;" />
+
+        <button class="btn btn-success mt-3" onclick="processPayment()">Please Pay ₹<span id='amountUPI'></span></button>
+        <button class="btn btn-danger mt-3" onclick="hideUPIPopup()">Cancel</button>
+    </div>
+</div>
+
+<!-- EMAIL POPUP -->
+<div id="emailPopup" style="display:none;" class="overlay">
+    <div class="popup">
+        <h4>Enter Email Address</h4>
+
+        <input id="emailInput" type="email" class="form-control" placeholder="Enter email" />
+
+        <button class="btn btn-primary mt-3" onclick="sendEmail()">Send Email</button>
+        <button class="btn btn-danger mt-3" onclick="hideEmailPopup()">Cancel</button>
+    </div>
+</div>
+
+<!-- SUCCESS POPUP -->
+<div id="successPopup" style="display:none;" class="overlay">
+    <div class="popup text-center">
+        <h3 class="text-success">Payment Successful 🎉</h3>
+        <p>Email Sent Successfully!</p>
+        <button class="btn btn-success" onclick="hideSuccessPopup()">OK</button>
+    </div>
+</div>
+
+<style>
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+        padding-top: 150px;
+    }
+
+    .popup {
+        background: white;
+        width: 400px;
+        margin: auto;
+        padding: 25px;
+        border-radius: 10px;
+    }
+</style>
+
+@section Scripts {
+
+    <script>
+
+        var selectedOrder = {};
+
+        window.onload = () => {
+            document.querySelectorAll("button[id^='payBtn']").forEach(btn => {
+                let orderId = btn.id.split("_")[1];
+
+                if (localStorage.getItem("paid_" + orderId) === "true") {
+                    markButtonPaid(orderId);
+                }
+            });
+        };
+
+        function markButtonPaid(orderId) {
+            let btn = document.getElementById("payBtn_" + orderId);
+            btn.classList.remove("btn-primary");
+            btn.classList.add("btn-success");
+            btn.innerText = "Paid ✓";
+            btn.disabled = true;
+        }
+
+        function startPayment(id, customer, product, qty, amount, date) {
+            selectedOrder = { id, customer, product, qty, amount, date };
+            document.getElementById("amountCard").innerText = amount;
+            document.getElementById("amountUPI").innerText = amount;
+            document.getElementById("paymentPopup").style.display = "block";
+        }
+
+        function hidePaymentPopup() { document.getElementById("paymentPopup").style.display = "none"; }
+        function showCardPayment() { hidePaymentPopup(); document.getElementById("cardPopup").style.display = "block"; }
+        function hideCardPopup() { document.getElementById("cardPopup").style.display = "none"; }
+        function showUPIPayment() { hidePaymentPopup(); document.getElementById("upiPopup").style.display = "block"; }
+        function hideUPIPopup() { document.getElementById("upiPopup").style.display = "none"; }
+
+        // PAYMENT PROCESSING
+        function processPayment() {
+
+            hideCardPopup();
+            hideUPIPopup();
+
+            document.getElementById("loader").style.display = "block";
+
+            setTimeout(() => {
+
+                let qr = document.getElementById("qrImage");
+                qr.style.border = "4px solid green";
+
+                localStorage.setItem("paid_" + selectedOrder.id, "true");
+
+                markButtonPaid(selectedOrder.id);
+
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("emailPopup").style.display = "block";
+
+            }, 2000);
+        }
+
+        // SEND EMAIL
+        function sendEmail() {
+
+            let email = document.getElementById("emailInput").value;
+            if (email.trim() === "") { alert("Please enter an email"); return; }
+
+            let tableHtml =
+                `<tr>
+                    <td>${selectedOrder.id}</td>
+                    <td>${selectedOrder.customer}</td>
+                    <td>${selectedOrder.product}</td>
+                    <td>${selectedOrder.qty}</td>
+                    <td>${selectedOrder.amount}</td>
+                    <td>${selectedOrder.date}</td>
+                </tr>`;
+
+            let payload = {
+                toEmail: email,
+                subject: "Order Invoice - Payment Successful",
+                message: "<h2>Your Order Summary</h2><table border='1' cellpadding='6'>" + tableHtml + "</table>"
+            };
+
+            fetch("/Orders/SendOrderEmail", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => {
+                if (res.ok) {
+                    document.getElementById("emailPopup").style.display = "none";
+                    document.getElementById("successPopup").style.display = "block";
+                } else {
+                    alert("Failed to send email!");
+                }
+            });
+        }
+
+        function hideEmailPopup() { document.getElementById("emailPopup").style.display = "none"; }
+        function hideSuccessPopup() { document.getElementById("successPopup").style.display = "none"; }
+
+    </script>
+
+}
+
+
+
+
+
+
+
+
+
+
+

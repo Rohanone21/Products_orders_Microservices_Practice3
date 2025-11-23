@@ -1,0 +1,23 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="container mt-4">
+    <h2>Product Performance (Date Range)</h2>
+
+    <table class="table table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Product</th>
+                <th>Total Orders</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.ProductName</td>
+                    <td>@p.TotalOrders</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

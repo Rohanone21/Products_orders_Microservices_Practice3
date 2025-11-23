@@ -1,0 +1,16 @@
+﻿@model JwtAuthorization.Models.LoginViewModel
+
+<h2>Login</h2>
+
+<form method="post">
+    <input asp-for="Email" placeholder="Email" class="form-control" />
+    <input asp-for="Password" placeholder="Password" type="password" class="form-control" />
+
+    <button type="submit" class="btn btn-primary mt-2">Login</button>
+</form>
+
+<p class="text-danger">@ViewBag.Error</p>
+
+<a href="/Account/Register">Create Account</a>
+<br />
+<a href="/Account/ForgotPassword">Forgot Password?</a>

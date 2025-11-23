@@ -1,0 +1,31 @@
+﻿@model Orders_New_MVC_Microservice.Models.Product
+
+<div class="container mt-4">
+    <h2>Create Order</h2>
+
+    <div class="card p-4">
+        <form asp-action="CreateOrder" method="post">
+
+            <!-- Hidden Product ID -->
+            <input type="hidden" name="ProductId" value="@Model.Id" />
+
+            <div class="mb-3">
+                <label class="form-label">Product</label>
+                <input class="form-control" value="@Model.Name" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Customer Name</label>
+                <input class="form-control" name="CustomerName" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Quantity</label>
+                <input class="form-control" type="number" name="Quantity" required />
+            </div>
+
+            <button class="btn btn-primary">Create</button>
+            <a href="/Orders/Index" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+</div>

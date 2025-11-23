@@ -1,0 +1,27 @@
+﻿@model List<Orders_New_MVC_Microservice.Models.ViewModels.ProductPerformanceVM>
+
+<div class="container mt-4">
+    <h2 class="text-primary">Product Performance</h2>
+
+    <table class="table table-bordered table-striped mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Total Orders</th>
+                <th>Total Quantity Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.TotalOrders</td>
+                    <td>@item.TotalQuantitySold</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

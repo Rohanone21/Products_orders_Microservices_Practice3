@@ -1,0 +1,83 @@
+﻿@* @{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2> Welcome To Store Insight</h2>
+
+<a class="btn btn-primary" href="https://localhost:7291"> Add  Customer  Orders  </a>
+<a class="btn btn-success" href="https://localhost:7204"> Add Products </a>
+
+<br />
+<br />
+
+<a class="btn btn-danger" href="/Account/Logout">Logout</a>
+ *@  
+
+
+
+
+@{
+    ViewData["Title"] = "Store Insight";
+}
+
+<style>
+    /* Image hover effect */
+    .store-img {
+        width: 100%;
+        max-width: 1200px;
+        border-radius: 12px;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        box-shadow: 0px 4px 14px rgba(0,0,0,0.2);
+    }
+
+        .store-img:hover {
+            transform: scale(1.03);
+            box-shadow: 0px 8px 22px rgba(0,0,0,0.35);
+        }
+
+    /* Button hover effects */
+    .btn-custom:hover {
+        transform: scale(1.08);
+        transition: 0.3s ease-in-out;
+    }
+
+    /* Container card styling */
+    .insight-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0px 6px 18px rgba(0,0,0,0.15);
+    }
+</style>
+
+
+<div class="container mt-4">
+
+    <div class="insight-card text-center">
+
+        <h2 class="mb-4">Welcome To Store Insight</h2>
+
+        <!-- Full width responsive image -->
+        <img src="https://6881959.fs1.hubspotusercontent-na1.net/hub/6881959/hubfs/RI-Video-thumbnails-V2_store.jpg?length=1920"
+             alt="Store Insight Image"
+             class="store-img mb-4" />
+
+        <!-- Buttons -->
+        <div class="mt-4">
+            <a class="btn btn-primary btn-lg mx-3 btn-custom" href="https://localhost:7291">
+                ➕ Add Customer Orders
+            </a>
+
+            <a class="btn btn-success btn-lg mx-3 btn-custom" href="https://localhost:7204">
+                📦 Add Products
+            </a>
+        </div>
+
+        <div class="mt-4">
+            <a class="btn btn-danger btn-lg btn-custom" href="/Account/Logout">
+                🚪 Logout
+            </a>
+        </div>
+
+    </div>
+</div>

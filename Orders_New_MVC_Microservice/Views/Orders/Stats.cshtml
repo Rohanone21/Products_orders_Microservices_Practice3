@@ -1,0 +1,28 @@
+﻿@model Orders_New_MVC_Microservice.Models.ViewModels.StatsViewModel
+
+<h2 class="text-primary mb-4">Statistics</h2>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card p-3 text-center bg-light">
+            <h4>Total Orders</h4>
+            <h2>@Model.TotalOrders</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 text-center bg-light">
+            <h4>Total Quantity</h4>
+            <h2>@Model.TotalQuantity</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 text-center bg-light">
+            <h4>Latest Order Date</h4>
+            <h4>@Model.LatestOrderDate</h4>
+        </div>
+    </div>
+
+</div>
